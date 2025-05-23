@@ -1,0 +1,88 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+void mostraInsufficientiEMigliori(int studenti[3][3]);
+
+int main(){
+    int studenti[3][3];
+    int med_stud=0;
+   
+   
+    for (int i = 0; i < 3; i++) {
+        cout << "Studente " << i + 1 << ":\n";
+        for (int j = 0; j < 3; j++) {
+            cout << "  Inserisci voto materia " << j + 1 << ": ";
+            cin >> studenti[i][j];
+        }
+        cout<<endl;
+    }
+
+
+    cout << "\nMedia voti per studente:\n";
+    for (int i = 0; i < 3; i++) {
+        int somma = 0;
+        for (int j = 0; j < 3; j++) {
+            somma += studenti[i][j];
+        }
+        float media = (float)somma / 3;
+        cout << "Studente " << i + 1 << ": " << media << endl;
+    }
+   
+    cout << "\nMedia per ogni materia:\n";
+    for (int j = 0; j < 3; j++) {
+        int somma = 0;
+        for (int i = 0; i < 3; i++) {
+            somma += studenti[i][j];
+        }
+        float media = (float)somma / 3;
+        cout <<"Materia "<<j+1<< ": " << media << endl;
+    }
+     mostraInsufficientiEMigliori(studenti);
+    return 0;
+ 
+}
+
+
+void mostraInsufficientiEMigliori(int studenti[3][3]) {
+    cout << "\nStudenti con almeno un'insufficienza:\n";
+    bool trovatoInsuff = false;
+    for (int i = 0; i < 3; i++) {
+        bool haInsuff = false;
+        for (int j = 0; j < 3; j++) {
+            if (studenti[i][j] < 6) {
+                haInsuff = true;
+                break;
+            }
+        }
+        if (haInsuff) {
+            cout << "Studente " << i + 1 << "\n";
+            trovatoInsuff = true;
+        }
+    }
+    if (!trovatoInsuff) {
+        cout << "Nessuno studente ha insufficienze.\n";
+    }
+
+
+    float mediaMax = 0;
+    float medie[3];
+
+    for (int i = 0; i < 3; i++) {
+        int somma = 0;
+        for (int j = 0; j < 3; j++) {
+            somma += studenti[i][j];
+        }
+        medie[i] = (float)somma / 3;
+        if (medie[i] > mediaMax) {
+            mediaMax = medie[i];
+        }
+    }
+
+    cout << "\nStudente con la media piu alta (" << mediaMax << "):\n";
+    for (int i = 0; i < 3; i++) {
+        if (medie[i] == mediaMax) {
+            cout << "Studente " << i + 1 << "\n";
+        }
+    }
+}
