@@ -1,0 +1,110 @@
+#include <iostream>
+#include <fstream>  
+#include <string>
+using namespace std;
+
+void mostraInsufficientiEMigliori(int studenti[3][3], ofstream& file);
+void creaIstogramma(int studenti[3][3], ofstream& file);
+
+int main() {
+    int studenti[3][3];
+    int med_stud = 0;
+
+    ofstream file("dati_studenti.txt");
+    if (!file) {
+        cout << "Impossibile aprire il file per la scrittura!" << endl;
+        return 1;
+    }
+
+    for (int i = 0; i < 3; i++) {
+        cout << "Studente " << i + 1 << ":\n";
+        for (int j = 0; j < 3; j++) {
+            cout << "  Inserisci voto materia " << j + 1 << ": ";
+            cin >> studenti[i][j];
+        }
+        cout << endl;
+    }
+
+    file << "\nMedia voti per studente:\n";
+    for (int i = 0; i < 3; i++) {
+        int somma = 0;
+        for (int j = 0; j < 3; j++) {
+            somma += studenti[i][j];
+        }
+        float media = (float)somma / 3;
+        file << "Studente " << i + 1 << ": " << media << endl;
+    }
+
+    file << "\nMedia per ogni materia:\n";
+    for (int j = 0; j < 3; j++) {
+        int somma = 0;
+        for (int i = 0; i < 3; i++) {
+            somma += studenti[i][j];
+        }
+        float media = (float)somma / 3;
+        file << "Materia " << j + 1 << ": " << media << endl;
+    }
+
+    mostraInsufficientiEMigliori(studenti, file);
+
+    creaIstogramma(studenti, file);
+
+    file.close();
+
+    return 0;
+}
+
+void mostraInsufficientiEMigliori(int studenti[3][3], ofstream& file) {
+    file << "\nStudenti con almeno un'insufficienza:\n";
+    bool trovatoInsuff = false;
+    for (int i = 0; i < 3; i++) {
+        bool haInsuff = false;
+        for (int j = 0; j < 3; j++) {
+            if (studenti[i][j] < 6) {
+                haInsuff = true;
+                break;
+            }
+        }
+        if (haInsuff) {
+            file << "Studente " << i + 1 << "\n";
+            trovatoInsuff = true;
+        }
+    }
+    if (!trovatoInsuff) {
+        file << "Nessuno studente ha insufficienze.\n";
+    }
+
+    float mediaMax = 0;
+    float medie[3];
+    for (int i = 0; i < 3; i++) {
+        int somma = 0;
+        for (int j = 0; j < 3; j++) {
+            somma += studenti[i][j];
+        }
+        medie[i] = (float)somma / 3;
+        if (medie[i] > mediaMax) {
+            mediaMax = medie[i];
+        }
+    }
+
+    file << "\nStudente con la media più alta (" << mediaMax << "):\n";
+    for (int i = 0; i < 3; i++) {
+        if (medie[i] == mediaMax) {
+            file << "Studente " << i + 1 << "\n";
+        }
+    }
+}
+
+void creaIstogramma(int studenti[3][3], ofstream& file) {
+    file << "\nIstogramma dei voti per ogni studente:\n";
+    for (int i = 0; i < 3; i++) {
+        file << "Studente " << i + 1 << ": ";
+        for (int j = 0; j < 3; j++) {
+            for (int k = 0; k < studenti[i][j]; k++) {
+                file << "*";
+            }
+            file << " "; 
+        }
+        file << endl;
+    }
+}
